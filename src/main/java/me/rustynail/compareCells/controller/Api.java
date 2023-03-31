@@ -19,6 +19,7 @@ import org.apache.poi.xssf.usermodel.DefaultIndexedColorMap;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFColor;
 import org.apache.poi.xssf.usermodel.XSSFColorScaleFormatting;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTColor;
 import org.springframework.http.HttpHeaders;
@@ -88,6 +89,14 @@ public class Api {
         if (sheet1 == null || sheet2 == null) {
             return;
         }
+
+        // 假如名字不一样
+        if (!sheet1.getSheetName().equals(sheet2.getSheetName())) {
+            log.warn("Sheet 名字不一样: [{}, {}]", sheet1.getSheetName(), sheet2.getSheetName());
+            ((XSSFSheet)sheet1).setTabColor(new XSSFColor(new java.awt.Color(216, 191, 216), new DefaultIndexedColorMap()));
+        }
+
+
         log.info("处理->" + sheet1.getSheetName() + "[" + s + "]" + " -- " + sheet2.getSheetName());
         var rowNums1 = sheet1.getLastRowNum();
 
