@@ -6,8 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
-<body> 
-    <small>文件1中和文件2中相同位置不一样的单元格会被标上<span style="background-color: Thistle;">颜色</span></small>
+<body>  
     <form id="compareForm" action="/api/cmp" method="post" enctype="multipart/form-data">
         <label for="file1">文件1</label>
         <input type="file" name="file1" id="file1">
@@ -17,8 +16,14 @@
         <input type="file" name="file2" id="file2">
 
         <hr>
-        <button type="submit">比对</button>
+        <button id="btn-sbt" type="submit">比对</button>
     </form>
+
+    <div class="desc">
+        <article>
+            <small>文件1中和文件2中相同位置不一样的单元格会被标上<span style="background-color: Thistle;">颜色</span></small>
+        </article>
+    </div>
 </body>
 <style>
     body {
@@ -26,13 +31,14 @@
         height: 100vh;
         display: flex;
         flex-direction: column;
-        justify-content: center;
+        /* justify-content: center; */
         justify-items: center;
         align-content: center;
         align-items: center;
     }
 
     #compareForm {
+        margin-top: 10%;
         width: 40%;
         height: auto;
         border: 1px black solid;
@@ -42,6 +48,17 @@
 
     input {
         margin: 10px;
+    }
+
+    .desc {
+        margin-top: 20px;
+    }
+
+    #btn-sbt {
+        color: #353535;
+        font-size: medium;
+        padding: 8px;
+        font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     }
 </style>
 </html>
