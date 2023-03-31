@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body> 
+    <small>文件1中和文件2中相同位置不一样的单元格会被标上<span style="background-color: Thistle;">颜色</span></small>
+    <form id="compareForm" action="/api/cmp" method="post" enctype="multipart/form-data">
+        <label for="file1">文件1</label>
+        <input type="file" name="file1" id="file1">
+        <small>（会被标记的文件）</small>
+        <br>
+        <label for="file2">文件2</label>
+        <input type="file" name="file2" id="file2">
+
+        <hr>
+        <button type="submit">比对</button>
+    </form>
+</body>
+<style>
+    body {
+        min-width: 100vw;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        justify-items: center;
+        align-content: center;
+        align-items: center;
+    }
+
+    #compareForm {
+        width: 40%;
+        height: auto;
+        border: 1px black solid;
+        border-radius: 4px;
+        padding: 12px;
+    }
+
+    input {
+        margin: 10px;
+    }
+</style>
+</html>

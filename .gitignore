@@ -1,0 +1,12 @@
+.vscode/
+target/
+
+*.jar
+
+.iml/
+
+.idea/
+
+*.class
+
+*.java
