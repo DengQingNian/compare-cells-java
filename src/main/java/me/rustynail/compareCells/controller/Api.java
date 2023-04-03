@@ -146,6 +146,10 @@ public class Api {
                     setCellColor(cell1);
                     continue;
                 }
+                
+                if (cell1 == null) {
+                    continue;
+                }
 
                 if (cell1.toString().trim().equals(cell2.toString().trim())) {
                     continue;

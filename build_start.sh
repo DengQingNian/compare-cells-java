@@ -1,4 +1,5 @@
 mvn clean package -T 1C -Dmaven.skip.test=true
+docker stop compare-cells-java
 docker rm compare-cells-java
 docker rmi compare-cells-java:v1
 docker build -t compare-cells-java:v1 .
