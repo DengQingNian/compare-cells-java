@@ -1,27 +1,21 @@
 package me.rustynail.compareCells.controller;
 
+import lombok.extern.slf4j.Slf4j;
+import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.ByteArrayOutputStream;
 import java.net.URLEncoder;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
-
-import jakarta.annotation.Resource;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.Color;
 import org.apache.poi.ss.usermodel.FillPatternType;
-import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.util.WorkbookUtil;
-import org.apache.poi.util.StringUtil;
 import org.apache.poi.xssf.usermodel.DefaultIndexedColorMap;
-import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFColor;
-import org.apache.poi.xssf.usermodel.XSSFColorScaleFormatting;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTColor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,8 +23,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-
-import jakarta.servlet.http.HttpServletResponse;
 
 @Slf4j
 @RestController
@@ -55,8 +47,12 @@ public class Api {
 
         response.setStatus(HttpStatus.OK.value());
         response.setHeader(HttpHeaders.CONTENT_DISPOSITION,
-                "attachment;filename*=UTF-8''" + URLEncoder.encode(file1.getOriginalFilename(), "utf-8"));
-        wb.write(response.getOutputStream());
+                "attachment;filename=" + URLEncoder.encode(file1.getOriginalFilename(), "utf-8"));
+        ByteArrayOutputStream bao = new ByteArrayOutputStream();
+        wb.write(bao);
+        bao.flush();
+        byte[] buf = bao.toByteArray();
+        response.getOutputStream().write(buf);
         response.getOutputStream().flush();
     }
 
