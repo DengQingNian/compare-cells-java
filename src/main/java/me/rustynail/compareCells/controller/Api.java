@@ -79,6 +79,12 @@ public class Api {
     }
 
     private void compareSheets(Workbook wb1, Workbook wb2, int s) {
+        // if sheet count < s
+        if (wb1.getNumberOfSheets() <= s || wb2.getNumberOfSheets() <= s) {
+            return;
+        }
+
+
         var sheet1 = wb1.getSheetAt(s);
         var sheet2 = wb2.getSheetAt(s);
 
