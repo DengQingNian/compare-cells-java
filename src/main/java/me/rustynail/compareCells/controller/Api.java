@@ -138,23 +138,14 @@ public class Api {
 	private void compareSheets(int s, Sheet sheet1, Sheet sheet2) {
 		log.info("处理->" + sheet1.getSheetName() + "[" + s + "]" + " -- " + sheet2.getSheetName());
 		var rowNums1 = sheet1.getLastRowNum();
-		CountDownLatch latch = new CountDownLatch(rowNums1);
 		for (int r = 0; r <= rowNums1; r++) {
-			int finalR = r;
-//			executor.execute(() -> {
+			//			executor.execute(() -> {
 				try {
-					rowCheck(sheet1, sheet2, finalR);
+					rowCheck(sheet1, sheet2, r);
 				} catch (Exception e) {
 					log.error(e.getMessage(), e);
-				} finally {
-					latch.countDown();
 				}
 //			});
-		}
-		try {
-			latch.await();
-		} catch (InterruptedException e) {
-			throw new RuntimeException(e);
 		}
 	}
 
