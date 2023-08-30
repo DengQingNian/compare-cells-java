@@ -207,8 +207,8 @@ public class Api {
 
 
 	private void setCellColor(Cell cell) {
-		log.info("染色：" + cell.getSheet().getSheetName() + "- [" + cell.getRowIndex() + ","
-				+ cell.getColumnIndex() + "]");
+		log.info("染色：" + "- [" + cell.getRowIndex() + ","
+				+ cell.getColumnIndex() + "] " + cell.getSheet().getSheetName() );
 		CellStyle cellStyle = cell.getCellStyle();
 		if (cellStyle == null) {
 			cellStyle = cell.getSheet().getWorkbook().createCellStyle();
