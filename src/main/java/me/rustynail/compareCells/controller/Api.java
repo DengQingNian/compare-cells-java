@@ -218,16 +218,16 @@ public class Api {
 		}
 		// #fff
 		if (cellStyle instanceof HSSFCellStyle) {
-			HSSFCellStyle style = (HSSFCellStyle) cell.getSheet().getWorkbook().createCellStyle();
+//			HSSFCellStyle style = (HSSFCellStyle) cell.getSheet().getWorkbook().createCellStyle();
 
-			style.cloneStyleFrom(cellStyle);
+//			style.cloneStyleFrom(cellStyle);
 			HSSFPalette customPalette = ((HSSFWorkbook) cell.getRow().getSheet().getWorkbook()).getCustomPalette();
 			customPalette.setColorAtIndex(HSSFColor.HSSFColorPredefined.LEMON_CHIFFON.getIndex(), (byte) 111, (byte) 11, (byte) 111);
 			HSSFColor similarColor = customPalette.findColor((byte) 111, (byte) 11, (byte) 111);
-			style.setFillBackgroundColor(similarColor);
+			cellStyle.setFillBackgroundColor(similarColor);
 //			style.setFillBackgroundColor(similarColor);
-			style.setFillPattern(FillPatternType.DIAMONDS);
-			cell.setCellStyle(style);
+			cellStyle.setFillPattern(FillPatternType.DIAMONDS);
+			cell.setCellStyle(cellStyle);
 		} else {
 			cellStyle.setFillForegroundColor(new XSSFColor(new java.awt.Color(216, 191, 216), new DefaultIndexedColorMap()));
 			cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
