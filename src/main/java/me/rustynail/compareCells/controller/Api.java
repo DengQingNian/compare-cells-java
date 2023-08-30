@@ -226,9 +226,9 @@ public class Api {
 				+ cell.getColumnIndex() + "] " + cell.getSheet().getSheetName());
 		CellStyle cellStyle = cell.getCellStyle();
 		if (cellStyle == null) {
-			cellStyle = cell.getSheet().getWorkbook().createCellStyle();
+			cellStyle = cell.getSheet().getWorkbook().getCellStyleAt(cell.getSheet().getWorkbook().getNumCellStyles()-3);
 		} else {
-			var cellStylea = cell.getSheet().getWorkbook().createCellStyle();
+			var cellStylea = cell.getSheet().getWorkbook().getCellStyleAt(cell.getSheet().getWorkbook().getNumCellStyles()-3);
 			cellStylea.cloneStyleFrom(cellStyle);
 			cellStyle = cellStylea;
 		}
