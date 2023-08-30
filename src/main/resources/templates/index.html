@@ -6,27 +6,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
-<body>  
-    <form id="compareForm" action="/api/cmp" method="post" enctype="multipart/form-data">
-        <label for="file1">文件一</label>
-        <input type="file" name="file1" id="file1">
-        <small>（会被标记的文件）</small>
+<body>
+<form id="compareForm" action="/api/cmp" method="post" enctype="multipart/form-data">
+    <label for="file1">文件一</label>
+    <input type="file" name="file1" id="file1">
+    <small>（会被标记的文件）</small>
+    <br>
+    <label for="file2">文件二</label>
+    <input type="file" name="file2" id="file2">
+
+    <hr>
+    <button id="btn-sbt" type="submit">比对</button>
+</form>
+
+<div class="desc">
+    <article>
+        <small>文件1中和文件2中相同位置不一样的单元格会被标上<span
+                style="background-color: Thistle;">颜色</span></small>
         <br>
-        <label for="file2">文件二</label>
-        <input type="file" name="file2" id="file2">
-
-        <hr>
-        <button id="btn-sbt" type="submit">比对</button>
-    </form>
-
-    <div class="desc">
-        <article>
-            <small>文件1中和文件2中相同位置不一样的单元格会被标上<span style="background-color: Thistle;">颜色</span></small>
-            <p>先统一保存为<b>xlsx</b>格式再比对。<del><small>因为懒得兼容了。</small></del></p>
-        </article>
-    </div>
+        <small>xls暂时标记为<span class="stripe-1">阴影</span>而不是<span style="background-color: Thistle;">颜色</span></small>
+    </article>
+</div>
 </body>
 <style>
+
+    .stripe-1 {
+        color: white;
+        background: repeating-linear-gradient(45deg, transparent, transparent 1px, #ccc 1px, #ccc 2px), linear-gradient(to bottom, grey, black);
+    }
+
     body {
         min-width: 100vw;
         height: 100vh;
