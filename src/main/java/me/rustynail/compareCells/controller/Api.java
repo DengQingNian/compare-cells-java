@@ -3,7 +3,6 @@ package me.rustynail.compareCells.controller;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFPalette;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -96,8 +95,7 @@ public class Api {
 		CountDownLatch latch = new CountDownLatch(sheetNums1);
 		for (var s = 0; s < sheetNums1; s++) {
 			try {
-				int finalS = s;
-				compareJob(wb1, wb2, finalS);
+				compareJob(wb1, wb2, s);
 //                executor.execute(() -> compareSheets(wb1, wb2, finalS));
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -137,78 +135,95 @@ public class Api {
 	private void compareSheets(int s, Sheet sheet1, Sheet sheet2) {
 		log.info("处理->" + sheet1.getSheetName() + "[" + s + "]" + " -- " + sheet2.getSheetName());
 		var rowNums1 = sheet1.getLastRowNum();
-
+		CountDownLatch latch = new CountDownLatch(rowNums1);
 		for (int r = 0; r <= rowNums1; r++) {
-
-			var row1 = sheet1.getRow(r);
-
-			var row2 = sheet2.getRow(r);
-
-			if (row1 == null && row2 == null) {
-				log.info(sheet1.getSheetName() + "--" + r + " 全空行跳过");
-				continue;
-			}
-
-			// 在新文件里有，旧文件没有
-			if (row1 != null && row2 == null) {
-				for (int c = 0; c < row1.getLastCellNum(); c++) {
-					var cell1 = row1.getCell(c);
-					if (cell1 == null) {
-						cell1 = row1.createCell(c);
-					}
-					setCellColor(cell1);
+			int finalR = r;
+//			executor.execute(() -> {
+				try {
+					rowCheck(sheet1, sheet2, finalR);
+				} catch (Exception e) {
+					log.error(e.getMessage(), e);
+				} finally {
+					latch.countDown();
 				}
-				continue;
-			}
+//			});
+		}
+		try {
+			latch.await();
+		} catch (InterruptedException e) {
+			throw new RuntimeException(e);
+		}
+	}
 
-			// 在新文件里没有，旧文件有
-			if (row1 == null) {
-				log.info(sheet1.getSheetName() + "--" + r + " 新文件空行跳过");
-				continue;
-			}
+	private void rowCheck(Sheet sheet1, Sheet sheet2, int r) {
+		var row1 = sheet1.getRow(r);
 
-			var colNums1 = row1.getLastCellNum();
+		var row2 = sheet2.getRow(r);
 
-			for (int c = 0; c <= colNums1; c++) {
+		if (row1 == null && row2 == null) {
+			log.info(sheet1.getSheetName() + "--" + r + " 全空行跳过");
+			return;
+		}
 
+		// 在新文件里有，旧文件没有
+		if (row1 != null && row2 == null) {
+			for (int c = 0; c < row1.getLastCellNum(); c++) {
 				var cell1 = row1.getCell(c);
-
-				var cell2 = row2.getCell(c);
-
-				if (null == cell1 && null == cell2) {
-					log.info(sheet1.getSheetName() + "--" + r + " -- " + c + " 空cell跳过");
-					continue;
+				if (cell1 == null) {
+					cell1 = row1.createCell(c);
 				}
-
-				if (null != cell1 && null == cell2) {
-					setCellColor(cell1);
-					continue;
-				}
-
-				if (cell1 == null && !cell2.toString().trim().isEmpty()) {
-					Cell cell = row1.createCell(c);
-					setCellColor(cell);
-					continue;
-				}
-
-				if (cell1 == null || !cell1.toString().trim().equals(cell2.toString().trim())) {
-					log.info(sheet1.getSheetName() + "--" + sheet1.getSheetName() + " - " + r + " -- " + c
-							+ "[" + cell1 + " : "
-							+ cell2 + "]");
-					if (cell1 == null) {
-						cell1 = row1.createCell(c);
-					}
-					setCellColor(cell1);
-				}
-
+				setCellColor(cell1);
 			}
+			return;
+		}
+
+		// 在新文件里没有，旧文件有
+		if (row1 == null) {
+			log.info(sheet1.getSheetName() + "--" + r + " 新文件空行跳过");
+			return;
+		}
+
+		var colNums1 = row1.getLastCellNum();
+
+		for (int c = 0; c <= colNums1; c++) {
+
+			var cell1 = row1.getCell(c);
+
+			var cell2 = row2.getCell(c);
+
+			if (null == cell1 && null == cell2) {
+				log.info(sheet1.getSheetName() + "--" + r + " -- " + c + " 空cell跳过");
+				continue;
+			}
+
+			if (null != cell1 && null == cell2) {
+				setCellColor(cell1);
+				continue;
+			}
+
+			if (cell1 == null && !cell2.toString().trim().isEmpty()) {
+				Cell cell = row1.createCell(c);
+				setCellColor(cell);
+				continue;
+			}
+
+			if (cell1 == null || !cell1.toString().trim().equals(cell2.toString().trim())) {
+				log.info(sheet1.getSheetName() + "--" + sheet1.getSheetName() + " - " + r + " -- " + c
+						+ "[" + cell1 + " : "
+						+ cell2 + "]");
+				if (cell1 == null) {
+					cell1 = row1.createCell(c);
+				}
+				setCellColor(cell1);
+			}
+
 		}
 	}
 
 
 	private void setCellColor(Cell cell) {
 		log.info("染色：" + "- [" + cell.getRowIndex() + ","
-				+ cell.getColumnIndex() + "] " + cell.getSheet().getSheetName() );
+				+ cell.getColumnIndex() + "] " + cell.getSheet().getSheetName());
 		CellStyle cellStyle = cell.getCellStyle();
 		if (cellStyle == null) {
 			cellStyle = cell.getSheet().getWorkbook().createCellStyle();
