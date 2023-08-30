@@ -185,18 +185,19 @@ public class Api {
 					continue;
 				}
 
-				if (cell1 == null && cell2 != null && !"".equals(cell2.toString().trim())) {
+				if (cell1 == null && !cell2.toString().trim().isEmpty()) {
 					Cell cell = row1.createCell(c);
 					setCellColor(cell);
 					continue;
 				}
 
-				if (cell1.toString().trim().equals(cell2.toString().trim())) {
-					continue;
-				} else {
+				if (cell1 == null || !cell1.toString().trim().equals(cell2.toString().trim())) {
 					log.info(sheet1.getSheetName() + "--" + sheet1.getSheetName() + " - " + r + " -- " + c
 							+ "[" + cell1 + " : "
 							+ cell2 + "]");
+					if (cell1 == null) {
+						cell1 = row1.createCell(c);
+					}
 					setCellColor(cell1);
 				}
 
