@@ -76,6 +76,9 @@ public class Api {
 		wb = compareJob(fileBook1, fileBook2);
 
 
+
+		log.info("{} vs {}", file1.getOriginalFilename(), file2.getOriginalFilename());
+
 		response.setStatus(HttpStatus.OK.value());
 		response.setHeader(HttpHeaders.CONTENT_DISPOSITION,
 				"attachment;filename=" + URLEncoder.encode(file1.getOriginalFilename(), StandardCharsets.UTF_8));
